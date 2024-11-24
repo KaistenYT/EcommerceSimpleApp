@@ -1,7 +1,6 @@
 package ks.dev.ShoppingCartApp.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +9,6 @@ import java.math.BigDecimal;
 import java.util.List;
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Product {
@@ -31,13 +29,13 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true )
     private List<Image>  images;
 
-    public Product(String brand, String name, BigDecimal price, int inventory, String description, Category category, List<Image> images) {
+    public Product(String brand, String name, BigDecimal price, int inventory, String description, Category category) {
         this.brand = brand;
         this.name = name;
         this.price = price;
         this.inventory = inventory;
         this.description = description;
         this.category = category;
-        this.images = images;
+
     }
 }
