@@ -1,5 +1,6 @@
 package ks.dev.ShoppingCartApp.service.product;
 
+import ks.dev.ShoppingCartApp.dto.ProductDto;
 import ks.dev.ShoppingCartApp.model.Product;
 import ks.dev.ShoppingCartApp.request.AddProductRequest;
 import ks.dev.ShoppingCartApp.request.ProductUpdateRequest;
@@ -23,6 +24,6 @@ public interface IProductsService {
     Long countProductsByBrandAndName(String brand, String name);
 
 
-
-
+    List<ProductDto> getConvertedProducts(List<Product> products);
+    ProductDto convertToDto(Product product);
 }
