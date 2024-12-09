@@ -1,5 +1,7 @@
 package ks.dev.ShoppingCartApp.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,16 +9,19 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Product {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private  String name;
+    private String name;
     private String brand;
     private BigDecimal price;
     private int inventory;
@@ -26,8 +31,8 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true )
-    private List<Image>  images;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images;
 
     public Product(String brand, String name, BigDecimal price, int inventory, String description, Category category) {
         this.brand = brand;
@@ -36,6 +41,5 @@ public class Product {
         this.inventory = inventory;
         this.description = description;
         this.category = category;
-
     }
 }
