@@ -24,15 +24,17 @@ public class CartService implements ICartService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cart not found with id: " + id));
     }
 
+
     @Override
     @Transactional
     public void clearCart(Long id) {
-        Cart cart = getCart(id);
-        cartItemRepository.deleteAllByCartId(id);
-        cart.getItems().clear();
-        cart.setTotalAmount(BigDecimal.ZERO);
-        cartRepository.save(cart);
+      Cart cart = getCart(id);
+      cartItemRepository.deleteAllByCartId(id);
+      cart.getItems().clear();
+      cartRepository.deleteById(id);
     }
+
+
 
     @Override
     public BigDecimal getTotalPrice(Long id) {
