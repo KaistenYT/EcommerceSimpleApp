@@ -1,5 +1,6 @@
 package ks.dev.ShoppingCartApp.service.Order;
 
+import ks.dev.ShoppingCartApp.enums.OrderStatus;
 import ks.dev.ShoppingCartApp.exceptions.ResourceNotFoundException;
 import ks.dev.ShoppingCartApp.model.Cart;
 import ks.dev.ShoppingCartApp.model.Order;
@@ -13,6 +14,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -26,8 +29,23 @@ public class OrderService  implements  IOrderService{
 
     @Override
     public Order placeOrder(Long userId) {
+        Cart cart = cartService.getCartByUserId(userId);
+     Order order = createOrder(cart);
+     List<OrderItem> orderItemList = createOrderItems(order,cart);
+     order.setOrderItems(new HashSet<>(orderItemList));
+        order.setTotalAmount(calculateTotalPriceAmount(orderItemList));
+        Order saveOrder = orderRepository.save(order);
+         cartService.clearCart(cart.getId());
+        return  saveOrder;
 
-        return null;
+    }
+
+    private  Order createOrder(Cart cart){
+        Order order = new Order();
+        order.setUser(cart.getUser());
+        order.setOrderStatus(OrderStatus.PENDING);
+        order.setOrderDate(LocalDate.now());
+        return order;
     }
     private  List<OrderItem> createOrderItems(Order order, Cart cart){
         return   cart.getItems().stream().map(cartItem -> {
