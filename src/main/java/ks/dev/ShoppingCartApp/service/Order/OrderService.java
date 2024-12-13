@@ -48,7 +48,9 @@ public class OrderService  implements  IOrderService{
         return order;
     }
     private  List<OrderItem> createOrderItems(Order order, Cart cart){
-        return   cart.getItems().stream().map(cartItem -> {
+        return   cart.getItems()
+                .stream()
+                .map(cartItem -> {
             Product product = cartItem.getProduct();
             product.setInventory(product.getInventory()-cartItem.getQuantity());
             productRepository.save(product);
@@ -73,5 +75,9 @@ public class OrderService  implements  IOrderService{
                         .multiply(new BigDecimal(item.getQuantity())))
                 .reduce(BigDecimal.ZERO , BigDecimal::add);
 
+    }
+@Override
+public List<Order> getUserOrders(Long userId){
+        return orderRepository.findByUserId(userId);
     }
 }
