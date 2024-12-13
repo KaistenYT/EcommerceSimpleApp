@@ -1,5 +1,6 @@
 package ks.dev.ShoppingCartApp.service.Order;
 
+import ks.dev.ShoppingCartApp.dto.OrderDto;
 import ks.dev.ShoppingCartApp.model.Order;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 public interface IOrderService {
 
     Order placeOrder(Long userId);
-    Order getOrder(Long orderId);
+    OrderDto getOrder(Long orderId);
 
-    List<Order> getUserOrders(Long userId);
+    List<OrderDto> getUserOrders(Long userId);
 }

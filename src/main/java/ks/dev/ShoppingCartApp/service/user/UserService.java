@@ -1,5 +1,6 @@
 package ks.dev.ShoppingCartApp.service.user;
 
+import ks.dev.ShoppingCartApp.dto.UserDto;
 import ks.dev.ShoppingCartApp.exceptions.AlreadyExistsException;
 import ks.dev.ShoppingCartApp.exceptions.ResourceNotFoundException;
 import ks.dev.ShoppingCartApp.model.User;
@@ -53,6 +54,10 @@ public class UserService implements IUserService {
         userRepository.findById(userId).ifPresentOrElse(userRepository :: delete, () ->{
             throw new ResourceNotFoundException("User not found!");
         });
+    }
+@Override
+    public UserDto convertUserToDto(User user){
+        return modelMapper.map(user, UserDto.class);
     }
 
 }
