@@ -13,6 +13,7 @@ import ks.dev.ShoppingCartApp.service.cart.CartService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ public class OrderService  implements  IOrderService{
     private final CartService cartService;
     private final ModelMapper modelMapper;
 
-
+    @Transactional
     @Override
     public Order placeOrder(Long userId) {
         Cart cart = cartService.getCartByUserId(userId);
@@ -84,8 +85,8 @@ public List<OrderDto> getUserOrders(Long userId){
        return  orders.stream().map(this::convertToDto).toList();
     }
 
-
-    private OrderDto convertToDto(Order order) {
+@Override
+public OrderDto convertToDto(Order order) {
         return modelMapper.map(order, OrderDto.class);
     }
 }

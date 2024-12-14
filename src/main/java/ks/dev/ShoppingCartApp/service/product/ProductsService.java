@@ -2,6 +2,7 @@ package ks.dev.ShoppingCartApp.service.product;
 
 import ks.dev.ShoppingCartApp.dto.ImageDto;
 import ks.dev.ShoppingCartApp.dto.ProductDto;
+import ks.dev.ShoppingCartApp.exceptions.AlreadyExistsException;
 import ks.dev.ShoppingCartApp.exceptions.ProductNotFoundException;
 import ks.dev.ShoppingCartApp.model.Category;
 import ks.dev.ShoppingCartApp.model.Image;
@@ -31,15 +32,22 @@ public class ProductsService implements IProductsService{
 
     @Override
     public Product addProduct(AddProductRequest request) {
-    Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
-            .orElseGet(()->{
-                Category newCategory = new Category(request.getCategory().getName());
-                return categoryRepository.save(newCategory);
-            });
-    request.setCategory(category);
-    return productRepository.save(createProduct(request, category));
+   if (productExists(request.getName(),request.getBrand())){
+       throw  new AlreadyExistsException(request.getBrand() + request.getName() + "Already exist, you may update this product instead");
+
+   }
+   Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
+           .orElseGet(()->{
+               Category newCategory= new Category(request.getCategory().getName());
+               return categoryRepository.save(newCategory);
+           });
+   request.setCategory(category);
+   return  productRepository.save(createProduct(request,category));
 
 
+    }
+    private boolean productExists(String name , String brand) {
+        return productRepository.existByNameAndBrand(name,brand);
     }
 
     @Override

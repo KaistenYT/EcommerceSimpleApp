@@ -1,9 +1,12 @@
 package ks.dev.ShoppingCartApp.controller;
 
 import ks.dev.ShoppingCartApp.exceptions.ResourceNotFoundException;
+import ks.dev.ShoppingCartApp.model.Cart;
+import ks.dev.ShoppingCartApp.model.User;
 import ks.dev.ShoppingCartApp.response.ApiResponse;
 import ks.dev.ShoppingCartApp.service.cart.ICartItemService;
 import ks.dev.ShoppingCartApp.service.cart.ICartService;
+import ks.dev.ShoppingCartApp.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,22 +19,23 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CartItemController {
     private final ICartItemService cartItemService;
     private final ICartService cartService;
+    private final IUserService userService;
 
 @PostMapping("/item/add")
     public ResponseEntity<ApiResponse> addItemToCart(@RequestParam (required = false)Long cartId ,
                                                     @RequestParam Long productId ,
                                                      @RequestParam Integer quantity){
 
-        try {
-            if(cartId == null ){
-                cartId = cartService.initializerNewCart();
-            }
-            cartItemService.addItemToCart(cartId,productId,quantity);
-            return  ResponseEntity.ok(new ApiResponse("Add Item Success", null));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND)
-                    .body(new ApiResponse(e.getMessage(), null)) ;
-        }
+     try {
+         User user = userService.getUserById(1L);
+         Cart cart = cartService.initializeNewCart(user);
+         cartItemService.addItemToCart(cart.getId(), productId, quantity);
+
+         return ResponseEntity.ok(new ApiResponse("Add Item Success", null));
+     }catch (ResourceNotFoundException e){
+         return  ResponseEntity.status(NOT_FOUND)
+                 .body(new ApiResponse("Error: " + e.getMessage(), null));
+     }
 
     }
 

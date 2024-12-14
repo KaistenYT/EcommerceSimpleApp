@@ -1,6 +1,8 @@
 package ks.dev.ShoppingCartApp.service.cart;
 
 import ks.dev.ShoppingCartApp.model.Cart;
+import ks.dev.ShoppingCartApp.model.User;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -9,7 +11,11 @@ public interface ICartService {
     void clearCart(Long id);
     BigDecimal getTotalPrice(Long id);
 
-    Long initializerNewCart();
+
+
+
+
+    Cart initializeNewCart(User user);
 
     Cart getCartByUserId(Long userId);
 }
