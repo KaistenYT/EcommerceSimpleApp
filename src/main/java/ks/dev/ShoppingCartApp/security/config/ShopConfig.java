@@ -1,4 +1,4 @@
-package ks.dev.ShoppingCartApp.config;
+package ks.dev.ShoppingCartApp.security.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

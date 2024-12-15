@@ -47,7 +47,7 @@ public class ProductsService implements IProductsService{
 
     }
     private boolean productExists(String name , String brand) {
-        return productRepository.existByNameAndBrand(name,brand);
+        return productRepository.existsByNameAndBrand(name,brand);
     }
 
     @Override
