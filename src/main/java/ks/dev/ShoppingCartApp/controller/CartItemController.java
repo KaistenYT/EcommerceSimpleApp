@@ -1,5 +1,6 @@
 package ks.dev.ShoppingCartApp.controller;
 
+import io.jsonwebtoken.JwtException;
 import ks.dev.ShoppingCartApp.exceptions.ResourceNotFoundException;
 import ks.dev.ShoppingCartApp.model.Cart;
 import ks.dev.ShoppingCartApp.model.User;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,7 +29,7 @@ public class CartItemController {
                                                      @RequestParam Integer quantity){
 
      try {
-         User user = userService.getUserById(1L);
+         User user = userService.getAuthenticatedUser();
          Cart cart = cartService.initializeNewCart(user);
          cartItemService.addItemToCart(cart.getId(), productId, quantity);
 
@@ -35,6 +37,8 @@ public class CartItemController {
      }catch (ResourceNotFoundException e){
          return  ResponseEntity.status(NOT_FOUND)
                  .body(new ApiResponse("Error: " + e.getMessage(), null));
+     }catch (JwtException e){
+         return ResponseEntity.status(UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));
      }
 
     }

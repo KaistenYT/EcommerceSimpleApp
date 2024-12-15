@@ -91,7 +91,11 @@
 
 
 
-
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>${stripe-java.version}</version>
+		</dependency>
 
 
 
